@@ -1,0 +1,1257 @@
+---
+format: html
+echo: false
+warning: false
+---
+
+```{r dependencies}
+library(surveydown)
+library(dplyr)
+```
+
+::: {#welcome .sd-page}
+
+# Welcome to ROBINS-I v2!
+
+This is a companion tool for RoB assessment using ROBINS-I v2.
+
+Have fun!
+
+```{r welcome}
+sd_question(
+  type  = "text",
+  id    = "Reviewer",
+  label = "Your name:"
+)
+
+
+sd_question(
+  type  = 'select',
+  id    = 'StudyID',
+  label = "Which study are you assessing?",
+  option = c(
+"#180 - (Lodha,2015)"			="study0180",
+"#534 - (Al-Turkait,2022)"		="study0534",
+"#545 - (Lodha,2019)"			="study0545",
+"#548 - (Patel,2017)"			="study0548",
+"#550 - (Taha,2014)"			="study0550",
+"#769 - (Zhao,2024)"			="study0769",
+"#1080 - (Szatkowski,2023)"		="study1080",
+"#1356 - (Smith,2018)"			="study1356",
+"#1386 - (Bairam,2018)"			="study1386",
+"#1452 - (Chen,2024)"			="study1452",
+"#1572 - (Dobson,2014)"			="study1572",
+"#1618 - (Ji,2020)"				="study1618"
+  )
+)
+
+sd_next(next_page = 'prelimA')
+```
+:::
+
+::: {#prelimA .sd-page}
+# Preliminary considerations
+
+## A. Specify the result being assessed for risk of bias
+
+```{r pre-A}
+
+sd_question(
+  type  = "textarea",
+  id    = "A1",
+  label = "A1. Specify the numerical result being assessed"
+)
+
+sd_question(
+  type = "textarea",
+  id = "A2",
+  label = "A2. Provide further details about this result (for example, location in the study report, reason it was chosen)"
+)
+
+sd_next(next_page = 'prelimB')
+```
+:::
+
+::: {#prelimB .sd-page}
+# Preliminary considerations
+
+## B. Decide whether to proceed with a risk-of-bias assessment
+
+```{r pre-B}
+sd_question(
+  type   = "mc",
+  id     = "B1",
+  label  = "B1. Did the authors make any attempt to control for confounding?",
+  option = c(
+    "💚 Yes"= "Y",
+    "💚 Probably Yes" = "PY",
+    "⛔ Probably No"  = "PN",
+    "⛔ No" = "N"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "B2",
+  label  = "B2. [If N/PN to B1] Is there sufficient potential for confounding that an unadjusted result should not be considered further?",
+  option = c(
+    "⛔ Yes" = "Y",
+    "⛔ Probably Yes" = "PY",
+    "💚 Probably No"  = "PN",
+    "💚 No" = "N"
+  )
+)
+
+
+sd_question(
+  type   = "mc",
+  id     = "B3",
+  label  = "B3. Was the method of measuring the outcome inappropriate?",
+  option = c(
+    "⛔ Yes" = "Y",
+    "⛔ Probably Yes" = "PY",
+    "💚 Probably No"  = "PN",
+    "💚 No" = "N"
+  )
+)
+
+sd_next(next_page = 'prelimC')
+```
+:::
+
+::: {#prelimC .sd-page}
+# Preliminary considerations
+
+## C. Specify the analysis in the current study for which results are being assessed for risk of bias
+
+```{r pre-C}
+sd_question(
+  type  = "textarea",
+  id    = "C0",
+  label = "C0. Specify the outcome to which this result relates"
+)
+
+sd_question(
+  type  = "textarea",
+  id    = "C1",
+  label = "C1. Specify the participant group on which this result was based."
+)
+
+sd_question(
+  type   = "mc",
+  id     = "C2",
+  label  = "C2. Was the analysis based on splitting participants’ follow up time according to intervention received, or was follow-up censored when participants in one group switched to another group (e.g. when comparison group participants started the intervention)?",
+  option = c(
+    "Yes"          = "Y",
+    "No"           = "N"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "C3",
+  label  = "C3. [If Y to C2] Were intervention discontinuations or switches likely to be related to factors that are predictive of the outcome?",
+  option = c(
+    "Yes"          = "Y",
+    "No"           = "N"
+  )
+)
+
+sd_next(next_page = 'prelimD')
+```
+:::
+
+::: {#prelimD .sd-page}
+# Preliminary considerations
+
+## D. Specify a (hypothetical) target randomized trial specific to the study
+
+```{r pre-D}
+
+sd_question(
+  type  = "textarea",
+  id    = "D1",
+  label = "D1. Specify the participants and eligibility criteria"
+)
+
+sd_question(
+  type  = "textarea",
+  id    = "D2",
+  label = "D2. Specify the intervention strategy"
+)  
+  
+sd_question(
+  type  = "textarea",
+  id    = "D3",
+  label = "D3. Specify the comparator strategy"
+)
+
+
+sd_next(next_page = 'prelimE')
+```
+:::
+
+::: {#prelimE .sd-page}
+# Preliminary considerations
+
+## E. Decide on the effect of interest
+
+```{r pre-E}
+
+sd_question(
+  type   = "mc",
+  id     = "E1",
+  label  = "E1. What is the aim for this study?",
+  option = c(
+    "To assess the intention-to-treat effect (the effect of assignment to an intervention strategy or comparator strategy)"          = "ITT",
+    "To assess a per-protocol effect (the effect of adhering to a specified intervention strategy or comparator strategy)"           = "PP"
+  )
+)
+
+sd_question(
+  type  = "textarea",
+  id    = "E2",
+  label = "E2. If the aim is to assess a per-protocol effect, briefly define the changes to the intervention or comparator strategies that will be considered to be protocol deviations and, optionally, those changes that will not be considered. For example, the protocol deviations considered could be: “Starting intervention among comparator group participants, while acceptable changes could be “stopping intervention because of intervention-related toxicities occur or disease progression” or “changes to intervention after the trial baseline”."
+)
+
+
+sd_next(next_page = 'prelimF')
+```
+:::
+
+::: {#prelimF .sd-page}
+# Preliminary considerations
+
+## F. Information sources
+
+```{r pre-F}
+sd_question(
+  type  = 'mc_multiple',
+  id    = 'F1',
+  label = "Which of the following sources have you obtained to help you inform your risk of bias judgements (tick as many as apply)?",
+  option = c(
+"Journal article(s)" = "paper",
+"Study protocol" = "protocol",
+"Statistical analysis plan (SAP)" = "sap",
+"Non-commercial registry record (e.g. ClinicalTrials.gov record)" = "registry_nc",
+"Company-owned registry record (e.g. GSK Clinical Study Register record)" = "registry_c",
+"Grey literature (e.g. unpublished thesis)" = "grey",
+"Conference abstract(s) " = "conference",
+"Regulatory document (e.g. Clinical Study Report, Drug Approval Package)" = "regulation",
+"Individual participant data" = "ipd",
+"Research ethics application" = "irb",
+"Grant database summary (e.g. NIH RePORTER, Research Councils UK Gateway to Research)" = "grant",
+"Personal communication with investigator" = "investigator",
+"Personal communication with sponsor" = "sponsor"
+  )
+)
+
+sd_next(next_page = 'Domain1')
+```
+:::
+
+::: {#Domain1 .sd-page}
+## Domain 1: Bias due to confounding
+
+```{r domain1}
+
+sd_question(
+  type   = "mc",
+  id     = "D1a_Q1",
+  label  = "1.1 Did the authors control for all the important confounding factors for which this was necessary?",
+  option = c(
+    "💚 Yes" = "Y",
+    "💚 Probably Yes" = "PY",
+    "🔷 Weak No" = "WN",
+    "⛔ Strong No" = "SN",
+    "🙄 No Information" = "NI"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D1a_Q2",
+  label  = "1.2 [If Y/PY/WN to 1.1] Were confounding factors that were controlled for (and for which control was necessary) measured validly and reliably by the variables available in this study?",
+  option = c(
+    "💚 Yes" = "Y",
+    "💚 Probably Yes" = "PY",
+    "🔷 Weak No" = "WN",
+    "⛔ Strong No" = "SN",
+    "🙄 No Information" = "NI"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D1a_Q3",
+  label  = "1.3 [If Y/PY/WN to 1.1] Did the authors control for any post-intervention variables that could have been affected by the intervention?",
+  option = c(
+    "⛔ Yes" = "Y",
+    "⛔ Probably Yes" = "PY",
+    "💚 Probably No" = "PN",
+    "💚 No" = "N",
+    "🙄 No Information" = "NI"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D1a_Q4",
+  label  = "1.4 Did the use of negative controls, quantitative bias analysis, or other considerations, suggest serious unmeasured confounding?",
+  option = c(
+    "⛔ Yes" = "Y",
+    "⛔ Probably Yes" = "PY",
+    "💚 Probably No" = "PN",
+    "💚 No" = "N"
+  )
+)
+
+
+sd_question(
+  type   = "mc",
+  id     = "D1b_Q1",
+  label  = "1.1 Did the authors use an analysis method that was appropriate to control for time-varying as well as baseline confounding?",
+  option = c(
+    "💚 Yes" = "Y",
+    "💚 Probably Yes" = "PY",
+    "⛔ Probably No" = "PN",
+    "⛔ No" = "N",
+    "🙄 No Information" = "NI"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D1b_Q2",
+  label  = "1.2 [If Y/PY to 1.1] Did the authors control for all the important baseline and time-varying confounding factors for which this was necessary?",
+  option = c(
+    "💚 Yes" = "Y",
+    "💚 Probably Yes" = "PY",
+    "🔷 Weak No" = "WN",
+    "⛔ Strong No" = "SN",
+    "🙄 No Information" = "NI"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D1b_Q3",
+  label  = "1.3 [If Y/PY/WN to 1.2] Were confounding factors that were controlled for (and for which control was necessary) measured validly and reliably by the variables available in this study? ",
+  option = c(
+    "💚 Yes" = "Y",
+    "💚 Probably Yes" = "PY",
+    "🔷 Weak No" = "WN",
+    "⛔ Strong No" = "SN",
+    "🙄 No Information" = "NI"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D1b_Q4",
+  label  = "1.4 [If N/PN/NI to 1.1] Did the authors control for time-varying factors or other variables measured after the start of intervention?",
+  option = c(
+    "⛔ Yes" = "Y",
+    "⛔ Probably Yes" = "PY",
+    "💚 Probably No" = "PN",
+    "💚 No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D1b_Q5",
+  label  = "1.5 Did the use of negative controls, or other considerations, suggest serious unmeasured confounding?",
+  option = c(
+    "⛔ Yes" = "Y",
+    "⛔ Probably Yes" = "PY",
+    "💚 Probably No" = "PN",
+    "💚 No" = "N"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D1a_overall",
+  label  = "Risk of bias judgement?",
+  option = c(
+    "🟨 Low risk of bias except for concerns about uncontrolled confounding" = "low",
+    "🟧 Moderate risk" = "moderate",
+    "🟥 Serious risk" = "serious",
+    "☠️ Critical risk" = "critical"
+  )
+)
+
+
+sd_question(
+  type   = "mc",
+  id     = "D1a_overall_dir",
+  label  = "What is the predicted direction of bias in classification of interventions?",
+  option = c(
+    "Upward bias (over-estimate the effect)" = "upward",
+    "Downward bias (Under-estimate the effect)" = "downward",
+    "Unpredictable" = "unknown" 
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D1b_overall",
+  label  = "Risk of bias judgement?",
+  option = c(
+    "🟨 Low risk of bias except for concerns about uncontrolled confounding" = "low",
+    "🟧 Moderate risk" = "moderate",
+    "🟥 Serious risk" = "serious",
+    "☠️ Critical risk" = "critical"
+  )
+)
+
+
+sd_question(
+  type   = "mc",
+  id     = "D1b_overall_dir",
+  label  = "What is the predicted direction of bias in classification of interventions?",
+  option = c(
+    "Upward bias (over-estimate the effect)" = "upward",
+    "Downward bias (Under-estimate the effect)" = "downward",
+    "Unpredictable" = "unknown" 
+  )
+)
+
+sd_next(next_page = 'Domain2')
+```
+:::
+
+::: {#Domain2 .sd-page}
+## Domain 2: Bias in classification of interventions
+
+```{r domain2}
+
+sd_question(
+  type   = "mc",
+  id     = "D2_Q1",
+  label  = "2.1 Did assignment of participants to the intervention group or the comparator group rely on events or measurements that occurred after the start of follow up?",
+  option = c(
+    "⛔ Yes" = "Y",
+    "⛔ Probably Yes" = "PY",
+    "💚 Probably No" = "PN",
+    "💚 No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D2_Q2",
+  label  = "2.2 [If Y/PY/NI to 2.1] Were participants included in the comparator group until they fulfilled the definition of the intervention (or vice versa)?",
+  option = c(
+    "⛔ Strong Yes" = "SY",
+    "🔷 Weak Yes" = "WY",
+    "💚 Probably No" = "PN",
+    "💚 No" = "N",
+    "🙄 No Information" = "NI"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D2_Q3",
+  label  = "2.3 [If N/PN to 2.1] Was all information used to classify intervention and comparator groups recorded at or before the time the interventions started?",
+    option = c(
+    "💚 Yes" = "Y",
+    "💚 Probably Yes" = "PY",
+    "⛔ Probably No" = "PN",
+    "⛔ No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D2_Q4",
+  label  = "2.4 Was classification of intervention status influenced by knowledge of the outcome or risk of the outcome?",
+    option = c(
+    "⛔ Strong Yes" = "SY",
+    "🔷 Weak Yes" = "WY",
+    "💚 Probably No" = "PN",
+    "💚 No" = "N",
+    "🙄 No Information" = "NI"
+  )
+)
+
+
+sd_question(
+  type   = "mc",
+  id     = "D2_Q5",
+  label  = "2.5 [If N/PN to 2.1 and WY/N/PN/NI 2.4] Was intervention status classified correctly for all, or nearly all, participants?",
+  option = c(
+    "💚 Yes" = "Y",
+    "💚 Probably Yes" = "PY",
+    "🔷 Weak No" = "WN",
+    "⛔ Strong No" = "SN",
+    "🙄 No Information" = "NI"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D2_overall",
+  label  = "Risk of bias judgement?",
+  option = c(
+    "🟩 Low risk" = "low",
+    "🟧 Moderate risk" = "moderate",
+    "🟥 Serious risk" = "serious",
+    "☠️ Critical risk" = "critical"
+  )
+)
+
+
+sd_question(
+  type   = "mc",
+  id     = "D2_overall_dir",
+  label  = "What is the predicted direction of bias in classification of interventions?",
+  option = c(
+    "Favors intervention" = "intervention",
+    "Favors comparator" = "comparator",
+    "Towards null" = "towards_null",
+    "Away from null" = "against_null",
+    "Unpredictable" = "unknown" 
+  )
+)
+
+sd_next(next_page = 'Domain3')
+```
+:::
+
+::: {#Domain3 .sd-page}
+## Domain 3: Bias in selection of participants into the study
+
+```{r domain3}
+
+sd_question(
+  type   = "mc",
+  id     = "D3_Q01",
+  label  = "3.1 (= 2.1) Did assignment of participants to the intervention group or the comparator group rely on events or measurements that occurred after the start of follow up?",
+option = c(
+    "⛔ Yes" = "Y",
+    "⛔ Probably Yes" = "PY",
+    "💚 Probably No" = "PN",
+    "💚 No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D3_Q02",
+  label  = "3.2 [If Y/PY to 3.1] Were participants excluded after the start of follow-up because they did not meet the definition of either the intervention or the comparator?",
+option = c(
+    "⛔ Yes" = "Y",
+    "⛔ Probably Yes" = "PY",
+    "💚 Probably No" = "PN",
+    "💚 No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D3_Q03",
+  label  = "3.3 Were start of follow-up and start of intervention the same for most participants?",
+option = c(
+    "💚 Yes" = "Y",
+    "💚 Probably Yes" = "PY",
+    "⛔ Probably No" = "PN",
+    "⛔ No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D3_Q04",
+  label  = "3.4 [If N/PN to 3.3] Is the effect of intervention expected to be constant over the time period studied?",
+option = c(
+    "💚 Yes" = "Y",
+    "💚 Probably Yes" = "PY",
+    "⛔ Probably No" = "PN",
+    "⛔ No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D3_Q05",
+  label  = "3.5 Was selection of participants into the study (or into the analysis) based on participant characteristics observed after the start of intervention (additional to the situations addressed in 3.1 and 3.3)?",
+option = c(
+    "⛔ Yes" = "Y",
+    "⛔ Probably Yes" = "PY",
+    "💚 Probably No" = "PN",
+    "💚 No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D3_Q06",
+  label  = "3.6 [If Y/PY to 3.5] Were the post-intervention variables that influenced selection likely to be associated with intervention?",
+option = c(
+    "⛔ Yes" = "Y",
+    "⛔ Probably Yes" = "PY",
+    "💚 Probably No" = "PN",
+    "💚 No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D3_Q07",
+  label  = "3.7 [If Y/PY to 3.6] Were the post-intervention variables that influenced selection likely to be influenced by the outcome or a cause of the outcome?",
+option = c(
+    "⛔ Yes" = "Y",
+    "⛔ Probably Yes" = "PY",
+    "💚 Probably No" = "PN",
+    "💚 No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D3_Q08",
+  label  = "3.8 [If Y/PY to 3.2, N/PN to 3.4 or Y/PY to 3.7] Is it likely that the analysis corrected for all potential selection biases identified in 3.1-3.2, 3.3-3.4 or 3.5-3.7 above?",
+option = c(
+    "💚 Yes" = "Y",
+    "💚 Probably Yes" = "PY",
+    "⛔ Probably No" = "PN",
+    "⛔ No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D3_Q09",
+  label  = "3.9 [If N/PN to 3.8] Did sensitivity analyses demonstrate that the likely impact of the potential selection biases identified in 3.1-3.2, 3.3-3.4 or 3.5-3.7 was minimal?",
+option = c(
+    "💚 Yes" = "Y",
+    "💚 Probably Yes" = "PY",
+    "⛔ Probably No" = "PN",
+    "⛔ No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D3_Q10",
+  label  = "3.10 [If N/PN to 3.9] Were potential selection biases identified sufficiently severe that the result should not be included in a quantitative synthesis?",
+option = c(
+    "⛔ Yes" = "Y",
+    "⛔ Probably Yes" = "PY",
+    "💚 Probably No" = "PN",
+    "💚 No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D3_overall",
+  label  = "Risk of bias judgement?",
+option = c(
+    "🟩 Low risk" = "low",
+    "🟧 Moderate risk" = "moderate",
+    "🟥 Serious risk" = "serious",
+    "☠️ Critical risk" = "critical"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D3_overall_dir",
+  label  = "What is the predicted direction of bias in participant selection?",
+option = c(
+    "Favours intervention" = "intervention",
+    "Favours comparator" = "comparator",
+    "Towards null" = "towards_null",
+    "Away from null" = "away_from_null",
+    "Unpredictable" = "unknown"
+  )
+)
+
+sd_next(next_page = 'Domain4')
+```
+:::
+
+::: {#Domain4 .sd-page}
+## Domain 4: Bias due to deviations from intended interventions
+
+```{r domain4}
+
+sd_question(
+  type   = "mc",
+  id     = "D4a_Q1",
+  label  = "4.1 Was the study undertaken in an experimental context?",
+  option = c(
+    "⛔ Yes" = "Y",
+    "⛔ Probably Yes" = "PY",
+    "💚 Probably No" = "PN",
+    "💚 No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D4a_Q2",
+  label  = "4.2 [If Y/PY to 4.1] Did participants deviate from the intended intervention as a result of the processes of recruiting and engaging them in the study?",
+  option = c(
+    "⛔ Yes" = "Y",
+    "⛔ Probably Yes" = "PY",
+    "💚 Probably No" = "PN",
+    "💚 No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D4a_Q3",
+  label  = "4.3 [If Y/PY to 4.1] Did study personnel consciously or unconsciously undermine implementation of the intended interventions?",
+  option = c(
+    "⛔ Yes" = "Y",
+    "⛔ Probably Yes" = "PY",
+    "💚 Probably No" = "PN",
+    "💚 No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D4a_Q4",
+  label  = "4.4 [If Y/PY/NI to 4.2 or 4.3] Were these deviations from intended intervention likely to have affected the outcome?",
+  option = c(
+    "⛔ Yes" = "Y",
+    "⛔ Probably Yes" = "PY",
+    "💚 Probably No" = "PN",
+    "💚 No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D4a_Q5",
+  label  = "4.5 Was an appropriate analysis used to estimate the effect of assignment to intervention?",
+  option = c(
+    "💚 Yes" = "Y",
+    "💚 Probably Yes" = "PY",
+    "🔷 Weak No" = "WN",
+    "⛔ Strong No" = "SN",
+    "🙄 No Information" = "NI"
+  )
+)
+
+
+sd_question(
+  type   = "mc",
+  id     = "D4a_overall",
+  label  = "Risk of bias judgement?",
+  option = c(
+    "🟩 Low risk" = "low",
+    "🟧 Moderate risk" = "moderate",
+    "🟥 Serious risk" = "serious",
+    "☠️ Critical risk" = "critical"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D4a_overall_dir",
+  label  = "What is the predicted direction of bias in classification of interventions?",
+  option = c(
+    "Favours intervention" = "intervention",
+    "Favours comparator" = "comparator",
+    "Towards null" = "towards_null",
+    "Away from null" = "away_from_null",
+    "Unpredictable" = "unknown"
+  )
+)
+
+
+sd_question(
+  type   = "mc",
+  id     = "D4b_Q1",
+  label  = "4.1 Did all or nearly all participants adhere to their assigned intervention strategy?",
+    option = c(
+    "💚 Yes" = "Y",
+    "💚 Probably Yes" = "PY",
+    "⛔ Probably No" = "PN",
+    "⛔ No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D4b_Q2",
+  label  = "4.2  [If N/PN/NI to 4.1] Were the protocol deviations likely to have affected the outcome?",
+  option = c(
+    "⛔ Yes" = "Y",
+    "⛔ Probably Yes" = "PY",
+    "💚 Probably No" = "PN",
+    "💚 No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D4b_Q3",
+  label  = "4.3  [If Y/PY to 4.2] Was an appropriate analysis used to estimate the specified per-protocol effect, accounting for the specified protocol deviations?",
+    option = c(
+    "💚 Yes" = "Y",
+    "💚 Probably Yes" = "PY",
+    "⛔ Probably No" = "PN",
+    "⛔ No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+)
+
+
+sd_question(
+  type   = "mc",
+  id     = "D4b_overall",
+  label  = "Risk of bias judgement?",
+  option = c(
+    "🟩 Low risk" = "low",
+    "🟧 Moderate risk" = "moderate",
+    "🟥 Serious risk" = "serious",
+    "☠️ Critical risk" = "critical"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D4b_overall_dir",
+  label  = "What is the predicted direction of bias in classification of interventions?",
+  option = c(
+    "Favours intervention" = "intervention",
+    "Favours comparator" = "comparator",
+    "Towards null" = "towards_null",
+    "Away from null" = "away_from_null",
+    "Unpredictable" = "unknown"
+  )
+)
+
+sd_next(next_page = 'Domain5')
+```
+:::
+
+::: {#Domain5 .sd-page}
+## Domain 5: Bias due to missing data
+
+```{r domain5}
+
+sd_question(
+  type   = "mc",
+  id     = "D5_Q01",
+  label  = "5.1 Were complete data on intervention status available for all, or nearly all, participants?",
+  option = c(
+    "💚 Yes" = "Y",
+    "💚 Probably Yes" = "PY",
+    "⛔ Probably No" = "PN",
+    "⛔ No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D5_Q02",
+  label  = "5.2 Were complete data on the outcome available for all, or nearly all, participants?",
+  option = c(
+    "💚 Yes" = "Y",
+    "💚 Probably Yes" = "PY",
+    "⛔ Probably No" = "PN",
+    "⛔ No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D5_Q03",
+  label  = "5.3 Were complete data on important confounding variables available for all, or nearly all, participants?",
+  option = c(
+    "💚 Yes" = "Y",
+    "💚 Probably Yes" = "PY",
+    "⛔ Probably No" = "PN",
+    "⛔ No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D5_Q04",
+  label  = "5.4 [If N/PN/NI to 5.1, 5.2 or 5.3] Is the result based on a complete case analysis?",
+  option = c(
+    "Yes" = "Y",
+    "Probably Yes" = "PY",
+    "Probably No" = "PN",
+    "No" = "N",
+    "No Information" = "NI"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D5_Q05",
+  label  = "5.5 [If Y/PY/NI to 5.4] Was exclusion from the analysis because of missing data likely to be related to the true value of the outcome?",
+  option = c(
+    "⛔ Yes" = "Y",
+    "⛔ Probably Yes" = "PY",
+    "💚 Probably No" = "PN",
+    "💚 No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D5_Q06",
+  label  = "5.6 [If Y/PY to 5.5] Is the relationship between the outcome and missingness likely to be explained by the variables in the analysis model?",
+  option = c(
+    "💚 Yes" = "Y",
+    "💚 Probably Yes" = "PY",
+    "🔷 Weak No" = "WN",
+    "⛔ Strong No" = "SN",
+    "🙄 No Information" = "NI"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D5_Q07",
+  label  = "5.7 [If N/PN to 5.4] Was the analysis based on imputing missing values?",
+  option = c(
+    "Yes" = "Y",
+    "Probably Yes" = "PY",
+    "Probably No" = "PN",
+    "No" = "N",
+    "No Information" = "NI"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D5_Q08",
+  label  = "5.8 [If N/PN/NI to 5.7] Is it reasonable to assume that data were ‘missing at random’ (MAR) or ‘missing completely at random’ (MCAR)?",
+    option = c(
+    "💚 Yes" = "Y",
+    "💚 Probably Yes" = "PY",
+    "⛔ Probably No" = "PN",
+    "⛔ No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D5_Q09",
+  label  = "5.9 [If Y/PY to 5.8] Was imputation performed appropriately?",
+  option = c(
+    "💚 Yes" = "Y",
+    "💚 Probably Yes" = "PY",
+    "🔷 Weak No" = "WN",
+    "⛔ Strong No" = "SN",
+    "🙄 No Information" = "NI"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D5_Q10",
+  label  = "5.10 [If N/PN/NI to 5.7] Was an appropriate alternative method used to correct for bias due to missing data?",
+  option = c(
+    "💚 Yes" = "Y",
+    "💚 Probably Yes" = "PY",
+    "🔷 Weak No" = "WN",
+    "⛔ Strong No" = "SN",
+    "🙄 No Information" = "NI"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D5_Q11",
+  label  = "5.11 [If PN/N/NI to 5.1, 5.2 or 5.3 AND (Y/PY/NI to 5.5 OR (Y/PY to 5.8 AND WN/SN/NI to 5.9) OR WN/SN/NI to 5.10)] Is there evidence that the result was not biased by missing data?",
+  option = c(
+    "💚 Yes" = "Y",
+    "💚 Probably Yes" = "PY",
+    "⛔ Probably No" = "PN",
+    "⛔ No" = "N"
+  ) 
+) 
+  
+sd_question(
+  type   = "mc",
+  id     = "D5_overall",
+  label  = "Risk of bias judgement?",
+  option = c(
+    "🟩 Low risk" = "low",
+    "🟧 Moderate risk" = "moderate",
+    "🟥 Serious risk" = "serious",
+    "☠️ Critical risk" = "critical"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D5_overall_dir",
+  label  = "What is the predicted direction of bias due to missing data?",
+  option = c(
+    "Favours intervention" = "intervention",
+    "Favours comparator" = "comparator",
+    "Towards null" = "towards_null",
+    "Away from null" = "away_from_null",
+    "Unpredictable" = "unknown"
+  )
+)
+
+sd_next(next_page = 'Domain6')
+```
+:::
+
+::: {#Domain6 .sd-page}
+## Domain 6: Bias in measurement of outcomes
+
+```{r domain6}
+
+sd_question(
+  type   = "mc",
+  id     = "D6_Q1",
+  label  = "6.1 Could measurement or ascertainment of the outcome have differed between intervention groups?",
+  option = c(
+    "⛔ Yes" = "Y",
+    "⛔ Probably Yes" = "PY",
+    "💚 Probably No" = "PN",
+    "💚 No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D6_Q2",
+  label  = "6.2 Were outcome assessors aware of the intervention received by study participants?",
+  option = c(
+    "⛔ Yes" = "Y",
+    "⛔ Probably Yes" = "PY",
+    "💚 Probably No" = "PN",
+    "💚 No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D6_Q3",
+  label  = "6.3 [If Y/PY/NI to 6.1] Were the methods of measuring the outcome likely to be influenced by knowledge of intervention received?",
+    option = c(
+    "⛔ Strong Yes" = "SY",
+    "🔷 Weak Yes" = "WY",
+    "💚 Probably No" = "PN",
+    "💚 No" = "N",
+    "🙄 No Information" = "NI"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D6_overall",
+  label  = "Risk of bias judgement?",
+  option = c(
+    "🟩 Low risk" = "low",
+    "🟧 Moderate risk" = "moderate",
+    "🟥 Serious risk" = "serious",
+    "☠️ Critical risk" = "critical"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D6_overall_dir",
+  label  = "What is the predicted direction of bias in measurement of outcomes?",
+  option = c(
+    "Favours intervention" = "intervention",
+    "Favours comparator" = "comparator",
+    "Towards null" = "towards_null",
+    "Away from null" = "away_from_null",
+    "Unpredictable" = "unknown"
+  )
+)
+
+sd_next(next_page = 'Domain7')
+```
+:::
+
+::: {#Domain7 .sd-page}
+## Domain 7: Bias in selection of the reported result
+
+```{r domain7}
+
+sd_question(
+  type   = "mc",
+  id     = "D7_Q1",
+  label  = "7.1 Was the result reported in accordance with an available, pre-determined analysis plan?",
+  option = c(
+    "💚 Yes" = "Y",
+    "💚 Probably Yes" = "PY",
+    "🔷 Weak No" = "WN",
+    "⛔ Strong No" = "SN",
+    "🙄 No Information" = "NI"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D7_Q2",
+  label  = "7.2 Is the numerical result being assessed likely to have been selected, on the basis of the results, from multiple outcome measurements (e.g. scales, definitions, time points) within the outcome domain? ",
+  option = c(
+    "⛔ Yes" = "Y",
+    "⛔ Probably Yes" = "PY",
+    "💚 Probably No" = "PN",
+    "💚 No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D7_Q3",
+  label  = "7.3 Is the numerical result being assessed likely to have been selected, on the basis of the results, from multiple analyses of the data? ",
+  option = c(
+    "⛔ Yes" = "Y",
+    "⛔ Probably Yes" = "PY",
+    "💚 Probably No" = "PN",
+    "💚 No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D7_Q4",
+  label  = "7.4 Is the numerical result being assessed likely to have been selected, on the basis of the results, from multiple subgroups? ",
+  option = c(
+    "⛔ Yes" = "Y",
+    "⛔ Probably Yes" = "PY",
+    "💚 Probably No" = "PN",
+    "💚 No" = "N",
+    "🙄 No Information" = "NI"
+  ) 
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D7_overall",
+  label  = "Risk of bias judgement?",
+  option = c(
+    "🟩 Low risk" = "low",
+    "🟧 Moderate risk" = "moderate",
+    "🟥 Serious risk" = "serious",
+    "☠️ Critical risk" = "critical"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "D7_overall_dir",
+  label  = "What is the predicted direction of bias in selection of the reported result?",
+  option = c(
+    "Favours intervention" = "intervention",
+    "Favours comparator" = "comparator",
+    "Towards null" = "towards_null",
+    "Away from null" = "away_from_null",
+    "Unpredictable" = "unknown"
+  )
+)
+
+sd_next(next_page = 'overall')
+```
+:::
+
+::: {#overall .sd-page}
+# Overall risk of bias
+
+```{r overall}
+sd_question(
+  type   = "mc",
+  id     = "Summary_overall",
+  label  = "Overall risk of bias?",
+  option = c(
+    "💚🟨 Low risk of bias except for concerns about uncontrolled confounding" = "low",
+    "🟧 Moderate risk" = "moderate",
+    "🟥 Serious risk" = "serious",
+    "☠️ Critical risk" = "critical"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "Summary_overall_dir",
+  label  = "What is the predicted direction of bias?",
+  option = c(
+    "Upward bias (over-estimate the effect)" = "upward",
+    "Downward bias (under-estimate the effect)" =  "downward",
+    "Favours intervention" = "intervention",
+    "Favours comparator" = "comparator",
+    "Towards null" = "towards_null",
+    "Away from null" = "away_from_null",
+    "Unpredictable" = "unknown"
+  )
+)
+
+sd_next(next_page = 'end')
+
+```
+:::
+
+::: {#end .sd-page}
+# End
+
+This is the end of ROBINS-I V2 assessment!
+
+Thank you!
+
+```{r}
+sd_close("Exit Survey")
+```
+:::
+
+::: {#end_critical .sd-page}
+# End: Critical risk of bias
+
+According to your preliminary assessments, the result is considered to be at "☠️ Critical risk of bias" and no futher assessment is required.
+
+Therefore, this is the end of ROBINS-I V2 assessment!
+
+Thank you!
+
+```{r}
+sd_close("Exit Survey")
+```
+:::
